@@ -128,10 +128,10 @@ enum BookStatus {
     categories: Category[];
   }
   
-  enum Gender {
-    Female = 0,
-    Male = 1
-  }
+//   enum Gender {
+//     Female = 0,
+//     Male = 1
+//   }
   
   interface Librarian {
     names: string;
