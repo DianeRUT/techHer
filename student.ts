@@ -102,9 +102,9 @@ calculateAverageGrade(): AverageGrade {
 function main() {
     const studentManager = new StudentManager();
 let count = 0;
-const maxsteps = 4;
+const maxcount = 4;
 
-while (count < maxsteps) {
+while (count < maxcount) {
     if(count === 0){
         console.log("Enter student details");
         studentManager.addStudent({
