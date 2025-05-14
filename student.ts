@@ -9,10 +9,8 @@ interface Student {
     names: string;
     gender: Gender;
     grade: number;
-    
-    
-
 }
+
 interface AverageGrade {
     value: number;
     scale?: string;
@@ -53,13 +51,30 @@ constructor(){
 
 
 addStudent (student: Student) :void{
-    if (this.searchStudent(student.rollNumber)){
-        console.log("student already exists");
-return;
-}
-    this.students.push(student);
-    console.log("student added successfully");
-}
+    //chech if the student doesn't exist by use of roll number
+    if
+   (this.isStudentExisting(student.rollNumber)) {
+      console.log(`Student with this roll numebr ${student.rollNumber} already exists`)
+      return;
+    } else {
+      this.students.push(student);
+      console.log('student added successfully')
+    }
+  }
+  removeStudent(rollNumber: number) {
+    //check if the student already exists and if he is , we delete and if he is not we give message
+    if (this.isStudentExisting(rollNumber)) {
+      this.students = this.students.filter((t: Student) => t.rollNumber !== rollNumber);
+      console.log('Student removed')
+    } else {
+      console.log('Student not found');
+    }
+  }
+
+  isStudentExisting(rollNumber: number): boolean {
+    return this.students.find((st: Student) => st.rollNumber === rollNumber) ? true : false
+    // this is a statement condition (?) is for if
+  }
 
 displayStudents(): Student[] {
     if (this.students.length === 0) {
@@ -89,53 +104,71 @@ calculateAverageGrade(): AverageGrade {
     return { value: average};
 }
 
- private searchStudent(rollNumber: number): number | null {
-    for (let i = 0; i < this.students.length; i++) {
-        if (this.students[i].rollNumber === rollNumber) {
-            return i;
-        }
-    }
-    return null;
-}
+//  private searchStudent(rollNumber: number): number | null {
+//     for (let i = 0; i < this.students.length; i++) {
+//         if (this.students[i].rollNumber === rollNumber) {
+//             return i;
+//         }
+//     }
+//     return null;
+// }
 }
 
 function main() {
-    const studentManager = new StudentManager();
-let count = 0;
-const maxcount = 4;
+  const studentManager = new StudentManager();
 
-while (count < maxcount) {
-    if(count === 0){
-        console.log("Enter student details");
-        studentManager.addStudent({
-            rollNumber: 1,
-            names: "John Doe",
-            grade: 85,
-            gender: Gender.Male,
-        });
-    }
-    if(count === 1){
-         console.log("Enter student details");
-        studentManager.addStudent({
-            rollNumber: 2,
-            names: "Jane Smith",
-            grade: 90,
-            gender: Gender.Female,
-        });
-    }
-       if(count === 2){
-         console.log("Display All Students");
-         studentManager.displayStudents();
-        
-}
-    if(count === 3){
-        console.log("Calculate Average Grade");
-        const average = studentManager.calculateAverageGrade();
-        console.log(`Average Grade: ${average.value}`);
-    }
-    count++;
-}
+  // Define students
+  const student1: Student = {
+    rollNumber: 1,
+    names: "John Doe",
+    grade: 85,
+    gender: Gender.Male,
+  };
 
-  console.log("Bye bye!! Exiting Menu.");
+  const student2: Student = {
+    rollNumber: 2,
+    names: "Jane Smith",
+    grade: 90,
+    gender: Gender.Female,
+  };
+
+  const student3: Student = {
+    rollNumber: 3,
+    names: "Alex Johnson",
+    grade: 78,
+    gender: Gender.Other,
+  };
+
+  const student4: Student = {
+    rollNumber: 1, // Duplicate roll number to test validation
+    names: "Duplicate John",
+    grade: 95,
+    gender: Gender.Male,
+  };
+
+  // Add students
+  studentManager.addStudent(student1);
+  studentManager.addStudent(student2);
+  studentManager.addStudent(student3);
+  studentManager.addStudent(student4); // This should will show the "already exists"
+
+  console.log("\nDisplay All Students");
+  studentManager.displayStudents();
+
+  console.log("\nCalculate Average Grade");
+  const average = studentManager.calculateAverageGrade();
+  console.log(`Average Grade: ${average.value}`);
+
+  console.log("\nTrying to remove student with roll number 2...");
+  studentManager.removeStudent(2);
+
+  console.log("\nTrying to remove student with roll number 999 (non-existing)...");
+  studentManager.removeStudent(999);
+
+  console.log("\nDisplay All Students After Removal");
+  studentManager.displayStudents();
+
+  console.log("\nBye bye!! Exiting Menu.");
 }
 main();
+
