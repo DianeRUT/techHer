@@ -9,6 +9,7 @@ interface Student {
     names: string;
     gender: Gender;
     grade: number;
+    
 }
 
 interface AverageGrade {
@@ -172,3 +173,11 @@ function main() {
 }
 main();
 
+//  class Product implements IProduct{
+//     public products: IProduct[];
+//     constructor(){
+//         this.products = [];
+//     }
+    
+
+//  }
