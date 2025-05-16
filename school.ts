@@ -199,7 +199,7 @@ enum SchoolCategory {
 
 //  the School interface
 interface School {
-    id: number;
+    id?: number;   
     name: string;
     address: string;
     category: SchoolCategory;
@@ -208,14 +208,31 @@ interface School {
 // School Manager class
 class SchoolManager {
     private schools: School[] = [];
+    private nextId: number = 1;
 
-    addSchool(school: School): void {
-        if (this.schools.some(s => s.name === school.name)) {
-            console.log(`School with name ${school.name} already exists.`);
-            return;
-        }
-        this.schools.push(school);
-        console.log('School added.');
+  addSchool(school: School): void {
+  // Check if the school already has an ID
+  if (school.id) {
+    let isIdTaken = this.schools.find((s: School) => s.id === school.id);
+    let id: number = 0;
+
+    // If ID already exists, keep generating a new one until it's unique
+    while (isIdTaken) {
+      id = this.generateId(); // Generate a new ID
+      isIdTaken = this.schools.find((s: School) => s.id === id); // Check again
+    }
+
+    school.id = id; // Assign the new unique ID
+  } else {
+    // If no ID provided, just generate a new one
+    school.id = this.generateId();
+  }
+
+  // Add the school to the list
+  this.schools.push(school);
+}
+    private generateId(): number {
+        return this.nextId++;
     }
 
     editSchool(id: number, updated: Partial<Omit<School, 'id'>>): boolean {
@@ -259,26 +276,25 @@ function mainSchoolDemo() {
     const schoolManager = new SchoolManager();
 
     // Define schools
-    const school1: School = {
-        id: 1,
+    const school1 = {
         name: 'Green Valley Primary',
         address: '123 Main St',
         category: SchoolCategory.PRIMARY,
     };
-    const school2: School = {
-        id: 2,
+    const school2 = {
+        
         name: 'Blue Lake Secondary',
         address: '456 Lake Ave',
         category: SchoolCategory.SECONDARY,
     };
-    const school3: School = {
-        id: 3,
+    const school3 = {
+     
         name: 'Red Mountain University',
         address: '789 University Rd',
         category: SchoolCategory.UNIVERSITY,
     };
-    const school4: School = {
-        id: 1, // Duplicate ID to test validation
+    const school4 ={
+    
         name: 'Duplicate Primary',
         address: '999 Duplicate St',
         category: SchoolCategory.PRIMARY,
